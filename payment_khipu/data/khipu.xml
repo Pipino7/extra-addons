@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="payment_provider_khipu" model="payment.provider">
+        <field name="name">Khipu</field>
+        <field name="code">khipu</field>
+        <field name="redirect_form_view_id" ref="khipu_form"/>
+    </record>
+
+    <record id="payment_method_webpay" model="account.payment.method">
+            <field name="name">Khipu</field>
+            <field name="code">khipu</field>
+            <field name="payment_type">inbound</field>
+    </record>
+
+</odoo>

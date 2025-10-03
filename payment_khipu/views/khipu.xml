@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <template id="khipu_form">
+          <form t-att-action="api_url" method="post">
+              <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
+              <input type="hidden" name="expires_date" t-att-value="expires_date"/>
+              <input type="hidden" name="transaction_id" t-att-value="item_number"/>
+              <input type="hidden" name="subject" t-att-value="subject"/>
+              <input type="hidden" name="amount" t-att-value="amount"/>
+              <input type="hidden" name="currency" t-att-value="currency"/>
+              <input type="hidden" name="body" t-att-value="body"/>
+              <input t-if="fees" type="hidden" name="fees"
+                  t-att-value="fees"/>
+              <!-- partner / address data -->
+              <input type="hidden" name="payer_email" t-att-value="payer_email"/>
+              <input t-if="bank_id" type="hidden" name="bank_id" t-att-value="bank_id"/>
+              <input type="hidden" name="expires_date" t-att-value="last_name"/>
+              <input t-if="notify_url" type="hidden" name="notify_url" t-att-value="notify_url"/>
+              <input t-if="cancel_url" type="hidden" name="cancel_url" t-att-value="cancel_url"/>
+              <input t-if="return_url" type="hidden" name="return_url" t-att-value="return_url"/>
+              <input t-if="picture_url" type="hidden" name="picture_url" t-att-value="picture_url"/>
+              <!-- after payment parameters -->
+              <input t-if='custom' type='hidden' name="custom"
+                  t-att-value='custom'/>
+              <input type="hidden" name="acquirer_id" t-att-value="acquirer_id"/>
+          </form>
+        </template>
+
+        <template id="khipu_redirect" name="khipu_redirect">
+          <t t-out="khipu_redirect" />
+        </template>
+
+        <template id="khipu_payment_success" name="Khipu Payment Success">
+            <t t-call="website.layout">
+                <div class="container my-5 text-center">
+                    <h1 class="text-success">¡Pago Exitoso! ✅</h1>
+                    <p class="lead">Tu pago con Khipu ha sido procesado correctamente.</p>
+                    <div class="card mt-4 text-left">
+                        <div class="card-body">
+                            <h4 class="card-title">Detalles de la Transacción</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Referencia:</strong> <span t-esc="tx.reference"/></li>
+                                <li class="list-group-item"><strong>Monto:</strong> <span t-esc="tx.amount" t-options="{'widget': 'monetary', 'display_currency': tx.currency_id}"/></li>
+                                <li class="list-group-item"><strong>ID de Pago Khipu:</strong> <span t-esc="tx.provider_reference"/></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="/" class="btn btn-primary mt-4">Volver a la Tienda</a>
+                </div>
+            </t>
+        </template>
+
+        <template id="khipu_static_status_page" name="Khipu Static Status Page">
+            <t t-call="website.layout">
+                <div class="container my-5 text-center">
+                    <t t-if="tx.state == 'done'">
+                        <h1 class="text-success">¡Pago Exitoso! ✅</h1>
+                        <p class="lead">Tu pago con Khipu ha sido procesado correctamente.</p>
+                    </t>
+                    <t t-else="">
+                        <div class="fa fa-spinner fa-spin fa-3x text-primary" role="status">
+                            <span class="sr-only">Cargando...</span>
+                        </div>
+                        <h1 class="mt-3">Pago en Verificación</h1>
+                        <p class="lead">Hemos recibido tu orden. La confirmación de tu pago está pendiente y se procesará en breve.</p>
+                        <p>Recibirás un correo electrónico una vez que el pago sea confirmado.</p>
+                    </t>
+    
+                    <div class="card mt-4 text-left">
+                        <div class="card-body">
+                            <h4 class="card-title">Resumen de tu Orden</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Referencia:</strong> <span t-esc="tx.reference"/></li>
+                                <li class="list-group-item"><strong>Monto:</strong> <span t-esc="tx.amount" t-options="{'widget': 'monetary', 'display_currency': tx.currency_id}"/></li>
+                                <li class="list-group-item"><strong>ID de Pago Khipu:</strong> <span t-esc="tx.provider_reference or 'Pendiente...'"/></li>
+                            </ul>
+                        </div>
+                    </div>
+    
+                    <a href="/shop" class="btn btn-primary mt-4">Volver a la Tienda</a>
+                </div>
+            </t>
+        </template>
+
+        <template id="khipu_waiting_page" name="Khipu Waiting for Payment Confirmation">
+            <t t-call="website.layout">
+                <div class="container my-5 text-center">
+                    <div class="fa fa-spinner fa-spin fa-3x text-primary" role="status">
+                        <span class="sr-only">Cargando...</span>
+                    </div>
+                    <h1 class="mt-3">Verificando tu pago...</h1>
+                    <p class="lead">Por favor, espera un momento mientras confirmamos tu pago con Khipu.</p>
+                    <p>No cierres ni recargues esta página.</p>
+                </div>
+    
+                <script t-attf-src="/payment_khipu/static/src/js/payment_processing.js"
+                        t-att-data-transaction-id="tx_id"
+                        t-att-data-check-status-url="'/payment/khipu/get_status'"
+                        t-att-data-success-url="'/shop/confirmation'"
+                        id="khipu-payment-script"/>
+            </t>
+        </template>
+    
+        <template id="khipu_payment_error" name="Khipu Payment Error">
+            <t t-call="website.layout">
+                <div class="container my-5 text-center">
+                    <h1 class="text-danger">Error en el Pago ❌</h1>
+                    <p class="lead">Lo sentimos, tu pago no pudo ser procesado.</p>
+                    <p t-if="error_message"><t t-esc="error_message"/></p>
+                    <a href="/shop/payment" class="btn btn-primary mt-4">Intentar de Nuevo</a>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>
