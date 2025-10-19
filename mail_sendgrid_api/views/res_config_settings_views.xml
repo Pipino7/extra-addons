@@ -9,8 +9,8 @@
             <field name="inherit_id" ref="base.res_config_settings_view_form"/>
             <field name="arch" type="xml">
                 
-                <!-- Agregar sección SendGrid en Configuración General -->
-                <xpath expr="//div[hasclass('settings')]" position="inside">
+                <!-- Agregar sección SendGrid en Configuración General (compatible Odoo 17-18) -->
+                <xpath expr="//div[contains(@class, 'o_setting_container')]" position="inside">
                     <div class="app_settings_block" data-string="SendGrid" 
                          string="SendGrid" data-key="mail_sendgrid_api">
                         
