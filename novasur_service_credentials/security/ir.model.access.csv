@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_credentials_manager,access_service_credentials_manager,model_service_credentials,sales_team.group_sale_manager,1,1,1,1
+access_service_credentials_salesman,access_service_credentials_salesman,model_service_credentials,sales_team.group_sale_salesman,1,0,0,0
+access_service_credentials_user,access_service_credentials_user,model_service_credentials,base.group_user,1,0,0,0
+access_service_credentials_portal,access_service_credentials_portal,model_service_credentials,base.group_portal,1,0,0,0

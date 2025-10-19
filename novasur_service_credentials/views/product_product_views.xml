@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vista formulario heredada de product.product -->
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.digital.service</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar botón en el button_box -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_credentials" 
+                            type="object" 
+                            class="oe_stat_button" 
+                            icon="fa-key"
+                            invisible="not is_digital_service"
+                            groups="sales_team.group_sale_manager">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="available_credential_count" widget="integer"/>
+                                /
+                                <field name="credential_count" widget="integer"/>
+                            </span>
+                            <span class="o_stat_text">Credenciales</span>
+                        </div>
+                    </button>
+                </xpath>
+
+                <!-- Agregar campos en la pestaña de Ventas -->
+                <xpath expr="//page[@name='sales']" position="inside">
+                    <group string="Servicio Digital" name="digital_service_group">
+                        <field name="is_digital_service"/>
+                        <field name="auto_assign_credentials" 
+                               invisible="not is_digital_service"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Vista formulario heredada de product.product (variantes) -->
+        <record id="product_variant_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.form.inherit.digital.service</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar botón en el button_box -->
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button name="action_view_credentials" 
+                            type="object" 
+                            class="oe_stat_button" 
+                            icon="fa-key"
+                            invisible="not is_digital_service"
+                            groups="sales_team.group_sale_manager">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="available_credential_count" widget="integer"/>
+                                /
+                                <field name="credential_count" widget="integer"/>
+                            </span>
+                            <span class="o_stat_text">Credenciales</span>
+                        </div>
+                    </button>
+                </xpath>
+
+                <!-- Agregar campos -->
+                <xpath expr="//group[@name='group_general']" position="after">
+                    <group string="Servicio Digital" name="digital_service_group">
+                        <field name="is_digital_service"/>
+                        <field name="auto_assign_credentials" 
+                               invisible="not is_digital_service"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

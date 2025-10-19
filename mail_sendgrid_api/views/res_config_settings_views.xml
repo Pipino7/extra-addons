@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extensión de la vista de configuración general -->
+        <record id="res_config_settings_view_form_inherit_sendgrid" model="ir.ui.view">
+            <field name="name">res.config.settings.form.inherit.sendgrid</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar sección SendGrid en Configuración General -->
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="SendGrid" 
+                         string="SendGrid" data-key="mail_sendgrid_api">
+                        
+                        <h2>📧 SendGrid API</h2>
+                        <div class="row mt16 o_settings_container">
+                            
+                            <!-- Activar SendGrid -->
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="sendgrid_enabled"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="sendgrid_enabled"/>
+                                    <div class="text-muted">
+                                        Usa SendGrid API en lugar de SMTP para enviar emails
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- API Key -->
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sendgrid_api_key" string="API Key"/>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <div class="col-lg-12">
+                                                <field name="sendgrid_api_key" 
+                                                       password="True"
+                                                       placeholder="SG.xxxxxxxxxxxxxxxxxx"/>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted">
+                                            🔑 Obtén tu API Key en: 
+                                            <a href="https://app.sendgrid.com/settings/api_keys" target="_blank">
+                                                SendGrid API Keys
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Email Remitente -->
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sendgrid_default_from_email" string="Email Remitente"/>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <div class="col-lg-12">
+                                                <field name="sendgrid_default_from_email" 
+                                                       placeholder="no-reply@tudominio.com"/>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted">
+                                            Email que aparecerá como remitente por defecto
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nombre Remitente -->
+                            <div class="col-12 col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <label for="sendgrid_default_from_name" string="Nombre Remitente"/>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <div class="col-lg-12">
+                                                <field name="sendgrid_default_from_name" 
+                                                       placeholder="Mi Empresa"/>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted">
+                                            Nombre que aparecerá como remitente por defecto
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botón de prueba -->
+                            <div class="col-12">
+                                <button name="action_test_sendgrid_connection" 
+                                        string="🧪 Probar Conexión" 
+                                        type="object" 
+                                        class="btn-primary"
+                                        help="Envía un email de prueba para verificar la configuración"/>
+                            </div>
+
+                            <!-- Información adicional -->
+                            <div class="col-12 mt32">
+                                <div class="alert alert-info" role="alert">
+                                    <h4 class="alert-heading">ℹ️ Información</h4>
+                                    <p>
+                                        <strong>SendGrid API</strong> permite enviar emails mediante HTTPS (puerto 443)
+                                        en lugar de SMTP (puerto 25/587), ideal para servidores con SMTP bloqueado.
+                                    </p>
+                                    <hr/>
+                                    <p class="mb-0">
+                                        <strong>Ventajas:</strong>
+                                    </p>
+                                    <ul>
+                                        <li>✅ No requiere configuración de SMTP</li>
+                                        <li>✅ Compatible con DigitalOcean, AWS, Google Cloud, etc.</li>
+                                        <li>✅ Más rápido y confiable que SMTP</li>
+                                        <li>✅ Estadísticas y tracking en SendGrid</li>
+                                        <li>✅ Mejor gestión de errores</li>
+                                    </ul>
+                                    <hr/>
+                                    <p class="mb-0">
+                                        <strong>📚 Documentación:</strong> 
+                                        <a href="https://docs.sendgrid.com/api-reference/mail-send/mail-send" target="_blank">
+                                            SendGrid Mail Send API
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

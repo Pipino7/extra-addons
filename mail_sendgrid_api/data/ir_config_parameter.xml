@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Parámetros por defecto de SendGrid -->
+        <record id="sendgrid_enabled_default" model="ir.config_parameter">
+            <field name="key">sendgrid.enabled</field>
+            <field name="value">False</field>
+        </record>
+
+    </data>
+</odoo>
