@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
-from odoo import models, fields, apifrom odoo import models, fields, api
+from odoo import models, fields, api
+
 
 
 
