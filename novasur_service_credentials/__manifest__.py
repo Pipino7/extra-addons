@@ -27,11 +27,11 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        'data/ir_cron.xml',
         'data/mail_template.xml',
         'views/service_credentials_views.xml',
         'views/product_product_views.xml',
         'views/sale_order_views.xml',
+        'data/ir_cron.xml',  # 👈 mover al final
     ],
     'demo': [],
     'installable': True,
