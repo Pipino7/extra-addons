@@ -7,7 +7,7 @@
             <field name="name">Credenciales: Marcar Expiradas</field>
             <field name="model_id" ref="model_service_credentials"/>
             <field name="state">code</field>
-            <field name="code">model.cron_check_expired_credentials()</field>
+            <field name="model_name">service.credentials</field>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
