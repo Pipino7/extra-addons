@@ -7,4 +7,4 @@ from . import service_credentials_assign    # Funciones de asignación y envío 
 from . import service_credentials_cron      # Cron job para expiraciones automáticas
 from . import product_product               # Herencia de productos para servicios digitales
 from . import sale_order                    # Integración con órdenes de venta
-
+from . import product_template
