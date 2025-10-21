@@ -5,10 +5,12 @@
     <!-- Cron: marcar credenciales expiradas -->
     <record id="ir_cron_check_expired_credentials" model="ir.cron">
       <field name="name">Credenciales: Marcar Expiradas</field>
-      <field name="model_id" ref="model_service_credentials"/>
+      <field name="model_name">service.credentials</field>
       <field name="state">code</field>
-      <field name="code">env["service.credentials"].cron_check_expired_credentials()</field>
-      <field name="user_id" ref="base.user_root"/>
+      <field name="code"><![CDATA[
+        env['service.credentials'].cron_check_expired_credentials()
+      ]]></field>
+      <field name="user_id" ref="base.user_admin"/>
       <field name="interval_number">1</field>
       <field name="interval_type">days</field>
       <field name="numbercall">-1</field>
@@ -17,13 +19,15 @@
       <field name="priority">5</field>
     </record>
 
-    <!-- Cron OPCIONAL: advertir próximas a expirar -->
+    <!-- Cron: advertir próximas a expirar -->
     <record id="ir_cron_warn_expiring_soon" model="ir.cron">
       <field name="name">Credenciales: Advertir Próximas a Expirar</field>
-      <field name="model_id" ref="model_service_credentials"/>
+      <field name="model_name">service.credentials</field>
       <field name="state">code</field>
-      <field name="code">env["service.credentials"].cron_warn_expiring_soon(days_before=7)</field>
-      <field name="user_id" ref="base.user_root"/>
+      <field name="code"><![CDATA[
+        env['service.credentials'].cron_warn_expiring_soon(days_before=7)
+      ]]></field>
+      <field name="user_id" ref="base.user_admin"/>
       <field name="interval_number">1</field>
       <field name="interval_type">days</field>
       <field name="numbercall">-1</field>
