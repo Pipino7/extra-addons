@@ -1,100 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
+  <data>
 
-        <!-- Vista formulario heredada de sale.order -->
-        <record id="view_order_form_inherit_credentials" model="ir.ui.view">
-            <field name="name">sale.order.form.inherit.credentials</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                
-                <!-- Agregar campo invisible para cómputo -->
-                <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="has_digital_services" invisible="1"/>
-                </xpath>
+    <!-- Herencia del formulario de sale.order -->
+    <record id="view_order_form_inherit_credentials" model="ir.ui.view">
+      <field name="name">sale.order.form.inherit.credentials</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="arch" type="xml">
 
-                <!-- Agregar alerta si tiene servicios digitales -->
-                <xpath expr="//sheet" position="before">
-                    <div class="alert alert-info" role="alert" 
-                         invisible="not has_digital_services or state != 'draft'"
-                         style="margin-bottom: 0;">
-                        <strong>ℹ️ Servicios Digitales:</strong> 
-                        Esta orden contiene servicios digitales. 
-                        Las credenciales se asignarán automáticamente al confirmar la venta.
-                    </div>
-                </xpath>
-                
-                <!-- Agregar columnas en las líneas de pedido -->
-                <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="after">
-                    <field name="service_credential_id" 
-                           optional="show"
-                           readonly="1"
-                           string="Credencial"
-                           groups="sales_team.group_sale_manager"/>
-                    <field name="credential_state" 
-                           optional="hide"
-                           widget="badge"
-                           string="Estado"
-                           decoration-success="credential_state == 'available'"
-                           decoration-info="credential_state == 'assigned'"
-                           decoration-danger="credential_state == 'expired'"
-                           decoration-warning="credential_state == 'pending_reset'"
-                           groups="sales_team.group_sale_manager"/>
-                </xpath>
+        <!-- 1) Campo técnico oculto para mostrar aviso (asegúrate de tenerlo en el modelo) -->
+        <xpath expr="//group[@name='partner_details']/field[@name='partner_id']" position="after">
+          <field name="has_digital_services" invisible="1"/>
+        </xpath>
 
-                <!-- Agregar campos en el formulario de línea -->
-                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
-                    <field name="service_credential_id" invisible="1"/>
-                </xpath>
+        <!-- 2) Aviso arriba del sheet cuando hay servicios digitales -->
+        <xpath expr="//sheet" position="before">
+          <div class="alert alert-info" role="alert"
+               invisible="not has_digital_services or state != 'draft'"
+               style="margin-bottom:0;">
+            <strong>ℹ️ Servicios Digitales:</strong>
+            Esta orden contiene servicios digitales. Las credenciales se asignarán automáticamente al confirmar la venta.
+          </div>
+        </xpath>
 
-                <xpath expr="//field[@name='order_line']/form//group[@name='discount_group']" position="after">
-                    <group string="🔑 Credencial Digital" 
-                           name="credential_group"
-                           invisible="not service_credential_id"
-                           groups="sales_team.group_sale_manager">
-                        <field name="credential_login" readonly="1" string="Usuario/Email"/>
-                        <field name="credential_password" password="True" readonly="1" string="Contraseña"
-                               groups="base.group_system"/>
-                        <field name="credential_state" readonly="1" widget="badge"
-                               decoration-success="credential_state == 'available'"
-                               decoration-info="credential_state == 'assigned'"
-                               decoration-danger="credential_state == 'expired'"
-                               decoration-warning="credential_state == 'pending_reset'"/>
-                        <button name="action_view_credential" 
-                                string="Ver Credencial Completa" 
-                                type="object" 
-                                class="btn-link"
-                                icon="fa-external-link"
-                                help="Abre el formulario completo de la credencial"/>
-                    </group>
-                    <group string="⚙️ Acciones Manuales" 
-                           name="credential_actions"
-                           invisible="service_credential_id or not product_id.is_digital_service"
-                           groups="sales_team.group_sale_manager">
-                        <button name="action_assign_credential_manually" 
-                                string="Asignar Credencial Manualmente" 
-                                type="object" 
-                                class="btn-primary"
-                                icon="fa-plus-circle"
-                                help="Asigna manualmente una credencial disponible"/>
-                    </group>
-                </xpath>
+        <!-- 3) Añadir columnas en el LIST embebido de order_line, después de product_uom_qty -->
+        <xpath expr="//field[@name='order_line']/list//field[@name='product_uom_qty']" position="after">
+          <field name="service_credential_id"
+                 optional="show"
+                 readonly="1"
+                 string="Credencial"
+                 groups="sales_team.group_sale_manager"/>
+          <field name="credential_state"
+                 optional="hide"
+                 widget="badge"
+                 string="Estado"
+                 decoration-success="credential_state == 'available'"
+                 decoration-info="credential_state == 'assigned'"
+                 decoration-danger="credential_state == 'expired'"
+                 decoration-warning="credential_state == 'pending_reset'"
+                 groups="sales_team.group_sale_manager"/>
+        </xpath>
 
-            </field>
-        </record>
+        <!-- 4) Decoración visual de filas sin credencial para productos digitales -->
+        <xpath expr="//field[@name='order_line']/list" position="attributes">
+          <attribute name="decoration-warning">product_id.is_digital_service and not service_credential_id</attribute>
+        </xpath>
 
-        <!-- Vista tree de sale.order.line con botón de asignación manual -->
-        <record id="view_sales_order_line_tree_credentials" model="ir.ui.view">
-            <field name="name">sale.order.line.tree.credentials</field>
-            <field name="model">sale.order.line</field>
-            <field name="inherit_id" ref="sale.view_order_line_tree"/>
-            <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                    <attribute name="decoration-warning">product_id.is_digital_service and not service_credential_id</attribute>
-                </xpath>
-            </field>
-        </record>
+        <!-- 5) Bloque de datos de credencial en el FORM embebido de la línea -->
+        <xpath expr="//field[@name='order_line']/form//div[@name='invoice_lines']" position="after">
+          <group string="🔑 Credencial Digital"
+                 name="credential_group"
+                 invisible="not service_credential_id"
+                 groups="sales_team.group_sale_manager">
+            <field name="service_credential_id" invisible="1"/>
+            <field name="credential_login" readonly="1" string="Usuario/Email"/>
+            <field name="credential_password" password="True" readonly="1" string="Contraseña" groups="base.group_system"/>
+            <field name="credential_state" readonly="1" widget="badge"
+                   decoration-success="credential_state == 'available'"
+                   decoration-info="credential_state == 'assigned'"
+                   decoration-danger="credential_state == 'expired'"
+                   decoration-warning="credential_state == 'pending_reset'"/>
+            <button name="action_view_credential"
+                    string="Ver Credencial Completa"
+                    type="object"
+                    class="btn-link"
+                    icon="fa-external-link"
+                    help="Abre el formulario completo de la credencial"/>
+          </group>
 
-    </data>
+          <group string="⚙️ Acciones Manuales"
+                 name="credential_actions"
+                 invisible="service_credential_id or not product_id.is_digital_service"
+                 groups="sales_team.group_sale_manager">
+            <button name="action_assign_credential_manually"
+                    string="Asignar Credencial Manualmente"
+                    type="object"
+                    class="btn-primary"
+                    icon="fa-plus-circle"
+                    help="Asigna manualmente una credencial disponible"/>
+          </group>
+        </xpath>
+
+      </field>
+    </record>
+
+  </data>
 </odoo>
