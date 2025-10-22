@@ -31,7 +31,7 @@
         'views/service_credentials_views.xml',
         'views/product_product_views.xml',
         'views/sale_order_views.xml',
-        'data/ir_cron.xml',  # 👈 mover al final
+        #'data/ir_cron.xml',  # 👈 mover al final
     ],
     'demo': [],
     'installable': True,
