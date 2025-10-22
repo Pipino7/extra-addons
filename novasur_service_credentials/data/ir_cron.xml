@@ -3,7 +3,8 @@
   <data noupdate="1">
     <record id="ir_cron_check_expired_credentials" model="ir.cron">
     <field name="name">Credenciales: Marcar Expiradas</field>
-    <field name="model_name">service.credentials</field>
+    <field name="model_id" ref="novasur_service_credentials.model_service_credentials"/>
+
     <field name="state">code</field>
     <field name="code">model.cron_check_expired_credentials()</field>
     <field name="user_id" ref="base.user_admin"/>
@@ -17,7 +18,7 @@
 
     <record id="ir_cron_warn_expiring_soon" model="ir.cron">
     <field name="name">Credenciales: Advertir Próximas a Expirar</field>
-    <field name="model_name">service.credentials</field>
+    <field name="model_id" ref="novasur_service_credentials.model_service_credentials"/>
     <field name="state">code</field>
     <field name="code">model.cron_warn_expiring_soon(days_before=7)</field>
     <field name="user_id" ref="base.user_admin"/>
