@@ -63,3 +63,10 @@ class ProductProduct(models.Model):
             'search_default_product_id': self.id,
         }
         return action
+
+    def open_variant_credentials(self):
+        """
+        Alias de action_view_credentials para compatibilidad con product.template.
+        Abre la vista de credenciales del producto.
+        """
+        return self.action_view_credentials()
